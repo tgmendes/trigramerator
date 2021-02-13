@@ -1,9 +1,10 @@
 package hello_test
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/tgmendes/go-service-template/business/hello"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/tgmendes/trigramerator/business/hello"
 )
 
 func TestHello(t *testing.T) {

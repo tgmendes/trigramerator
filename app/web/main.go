@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
-	"github.com/tgmendes/go-service-template/app/web/handlers"
-	"github.com/tgmendes/go-service-template/pkg/config"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/tgmendes/trigramerator/app/web/handlers"
+	"github.com/tgmendes/trigramerator/pkg/config"
 )
 
 func main() {
@@ -20,14 +21,13 @@ func main() {
 
 }
 
-
 func run() error {
 	cfg := config.Config{
 		Server: config.Server{
 			Host:            ":8080",
-			ReadTimeout:     5*time.Second,
-			WriteTimeout:    5*time.Second,
-			ShutdownTimeout: 5*time.Second,
+			ReadTimeout:     5 * time.Second,
+			WriteTimeout:    5 * time.Second,
+			ShutdownTimeout: 5 * time.Second,
 		},
 	}
 

@@ -1,6 +1,6 @@
-module github.com/tgmendes/go-service-template
+module github.com/tgmendes/trigramerator
 
-go 1.14
+go 1.15
 
 require (
 	github.com/julienschmidt/httprouter v1.3.0

@@ -1,8 +1,9 @@
 package handlers
 
 import (
-	"github.com/tgmendes/go-service-template/pkg/web"
 	"net/http"
+
+	"github.com/tgmendes/trigramerator/pkg/web"
 )
 
 type HelloResponse struct {
