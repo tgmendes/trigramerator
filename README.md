@@ -58,11 +58,10 @@ We could easily improve this to generate large pieces of text over multiple para
 
 ## Running the program
 
-The trigram service was built using `go 1.15.8` and `go modules`.
+The trigram service was built using `go 1.15.8` using Go modules.
 
-To run locally, please ensure you have these setup, and run `go mod install` before running the program. After that, the program should run with `go run app/web/main.go` from the root of the project.
-
-To run all tests: `go test ./...`.
+* Running: `go run app/web/main.go`
+* Testing: `go test ./...`
 
 ## Testing
 
