@@ -11,6 +11,7 @@ import (
 
 	"github.com/tgmendes/trigramerator/app/web/handlers"
 	"github.com/tgmendes/trigramerator/pkg/config"
+	"github.com/tgmendes/trigramerator/pkg/db"
 )
 
 func main() {
@@ -22,6 +23,8 @@ func main() {
 }
 
 func run() error {
+	// In a production environment we would be getting these configurations from environment variables.
+	// For this exercise we're just hardcoding for simplicity.
 	cfg := config.Config{
 		Server: config.Server{
 			Host:            ":8080",
@@ -35,9 +38,11 @@ func run() error {
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
 
+	db := db.NewMapSliceDB()
+
 	server := http.Server{
 		Addr:         cfg.Server.Host,
-		Handler:      handlers.API(shutdown),
+		Handler:      handlers.API(shutdown, db),
 		ReadTimeout:  cfg.Server.ReadTimeout,
 		WriteTimeout: cfg.Server.WriteTimeout,
 	}
