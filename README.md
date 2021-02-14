@@ -35,25 +35,26 @@ structure would be a hash map of string to lists of strings.
 
 The map keys are the first 2 words or a trigram (e.g. `"to be"`), and it is mapped to a list of all the words the service found that follow the trigram key. The benefit is that by randomly selecting a word in this list, it is more likely to get words that follow the key more often - hence we have a natural weighted probability.
 
-The main tradoff here is memory efficiency: the list will grow indefinitely with the number of words - with a lot of repetition. For simple - not so long - texts, this works fine, but this would not work for learning more extensive pieces of text (such as a full book or collection of books).
+The main tradeoff here is memory efficiency: the list will grow indefinitely with the number of words - with a lot of repeated words. For simple - not so long - texts, this works fine, but this would not work for learning more extensive pieces of text (such as a full book or collection of books).
 
 For this approach, a more sensible (more complex) solution could be to use a map instead of a slice: each third word of the trigram would appear only once (as the key), and the value would be the number of times it occurred in the text. An algorithm to compute weighted probabilities based on these values would then run to select the random word.
 
 ### Generated text size
 
-It is a conscious design decision to keep the size of the texts short. We are assuming here that we want just a paragraph excerpt generated from the learned trigrams.
+It is a conscious design decision to keep the size of the texts short. We are assuming that we want just a one paragraph excerpt generated from the learned trigrams.
 
-If we wanted to, we could further improve this to generate large pieces of text, using the original carriage returns (newlines) as newlines in our text.
+We could easily improve this to generate large pieces of text over multiple paragraphs, by preserving carriage returns (newlines) from the original text as one of the suffixes.
 
 ### Further Improvements
-* One of the next steps in having a more thoroughly tested and robust service would be to cover edge cases and incorrect formats (what if someone submits a text with only 2 words?). There was a conscious decision of not tackling these cases for now, in the interest of time.
+* More thoroughly tested and robust service would be to cover edge cases and incorrect formats (what if someone submits a text with only 2 words?). There was a conscious decision of not tackling these cases for now, in the interest of time.
 
-* Capitalization of words is also very naive at this point - and doesn't take into account quotes. 
+* Capitalization of words is also very naive at this point - for example, it doesn't take into account quotes. 
 
-* Learning a test can be done asynchronously (i.e. the user can send a text to learn and this can process in the background) using a go routine. However, the learning process (even big books)
-is quite fast, and for simplicity the decision was made to run this task synchronously.
+* Learning a text can be done asynchronously (i.e. the user can send a text to learn and this can process in the background) using a go routine. However, the learning process (even big books) is quite fast, and for simplicity the decision was made to run this task synchronously.
 
-* The text may finish on random words that might not make sense - could be something to improve upon as well.
+* The text may finish on random words that might not make sense.
+
+* Integration tests.
 
 ## Running the program
 
