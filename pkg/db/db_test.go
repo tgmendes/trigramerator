@@ -70,3 +70,18 @@ func TestConcurrentReadWrite(t *testing.T) {
 	// small sanity check - all added suffixes are in DB
 	assert.Len(t, suffixes, 100)
 }
+
+func TestEmptyRandomKey(t *testing.T) {
+	db := db.NewMapSliceDB()
+	key := db.RandomKey()
+
+	assert.Equal(t, "", key)
+}
+
+func TestNonEmptyRandomKey(t *testing.T) {
+	db := db.NewMapSliceDB()
+	db.Append("one two", "three")
+	key := db.RandomKey()
+
+	assert.Equal(t, "one two", key)
+}

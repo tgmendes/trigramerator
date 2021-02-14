@@ -42,3 +42,12 @@ func (db *MapSliceDB) Get(key string) []string {
 	}
 	return suffixes
 }
+
+// RandomKey will return a random key from our DB. It naively uses the
+// random characteristics of map iterations in Go to select a key.
+func (db *MapSliceDB) RandomKey() string {
+	for k, _ := range db.data {
+		return k
+	}
+	return ""
+}
