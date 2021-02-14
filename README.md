@@ -59,3 +59,9 @@ To run locally, please ensure you have these setup, and run `go mod install` bef
 
 To run all tests: `go test ./...`.
 
+## Testing
+
+The following endpoints are exposed:
+
+* `http://localhost:8080/learn` - `POST` with a text to learn trigrams (e.g. `curl --data-binary @harrypotter_test.txt localhost:8080/learn`).
+* `http://localhost:8080/generate` - `GET` to generate a random piece of text.
