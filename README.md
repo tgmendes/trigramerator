@@ -39,17 +39,21 @@ The main tradoff here is memory efficiency: the list will grow indefinitely with
 
 For this approach, a more sensible (more complex) solution could be to use a map instead of a slice: each third word of the trigram would appear only once (as the key), and the value would be the number of times it occurred in the text. An algorithm to compute weighted probabilities based on these values would then run to select the random word.
 
-### Generator stop point
+### Generated text size
 
-The current generator can potentially run indefinitely, leaving the user to wait for a long period of time. Adding a break point to avoid long running times would be a sensible approach. In the 
-interest of time, a breaker was not added in this example.
+It is a conscious design decision to keep the size of the texts short. We are assuming here that we want just a paragraph excerpt generated from the learned trigrams.
+
+If we wanted to, we could further improve this to generate large pieces of text, using the original carriage returns (newlines) as newlines in our text.
 
 ### Further Improvements
+* One of the next steps in having a more thoroughly tested and robust service would be to cover edge cases and incorrect formats (what if someone submits a text with only 2 words?). There was a conscious decision of not tackling these cases for now, in the interest of time.
 
+* Capitalization of words is also very naive at this point - and doesn't take into account quotes. 
 
-One of the next steps in having a more thoroughly tested and robust service would be to cover edge cases and incorrect formats (what if someone submits a text with only 2 words?). There was a conscious decision of not tackling these cases for now, in the interest of time.
+* Learning a test can be done asynchronously (i.e. the user can send a text to learn and this can process in the background) using a go routine. However, the learning process (even big books)
+is quite fast, and for simplicity the decision was made to run this task synchronously.
 
-Capitalization of words is also very naive at this point - and doesn't take into account quotes, and also doesn't work for some newlines. This would be another area of improvement in the future.
+* The text may finish on random words that might not make sense - could be something to improve upon as well.
 
 ## Running the program
 

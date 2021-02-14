@@ -11,10 +11,10 @@ import (
 func TestLearnTrigram(t *testing.T) {
 	mockDB := new(storerMock)
 	mockDB.On("Append", mock.Anything, mock.Anything).Return(nil)
-	in := "To be or not to be, that is the question"
+	in := "To be or not to be, that is the question.\n What?"
 
 	err := trigram.Learn(mockDB, in)
-	mockDB.AssertNumberOfCalls(t, "Append", 8)
+	mockDB.AssertNumberOfCalls(t, "Append", 9)
 	mockDB.AssertExpectations(t)
 	assert.NoError(t, err)
 }
@@ -27,7 +27,7 @@ func TestGenerate(t *testing.T) {
 		"or not":       {"to,"},
 		"not to":       {"that"},
 		"to that":      {"is"},
-		"that is":      {"the\n"},
+		"that is":      {"the"},
 		"is the":       {"question."},
 		"the question": {"is"},
 		"question is":  {"that"},
@@ -40,7 +40,7 @@ func TestGenerate(t *testing.T) {
 
 	text, err := trigram.Generate(mockDB, "", "")
 
-	assert.Equal(t, "To be or not to, that is the\n Question. Is that", text)
+	assert.Equal(t, "To be or not to, that is the question. Is that.\n", text)
 	assert.NoError(t, err)
 }
 

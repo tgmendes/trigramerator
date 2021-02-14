@@ -22,16 +22,15 @@ func (t trigramService) handleLearn(w http.ResponseWriter, r *http.Request) erro
 		return err
 	}
 
-	go func() {
-		err := trigram.Learn(t.db, string(newText))
-		if err != nil {
-			log.Printf("an error occurred learning text: %s", err.Error())
-			return
-		}
-		log.Printf("new text successfully learned!")
-	}()
+	err = trigram.Learn(t.db, string(newText))
+	if err != nil {
+		log.Printf("an error occurred learning text: %s", err.Error())
+		web.RespondError(w, fmt.Sprintf("error occurred learning text: %s", err.Error()), http.StatusInternalServerError)
+		return err
+	}
+	log.Printf("new text successfully learned!")
 
-	web.RespondText(w, "", http.StatusAccepted)
+	web.RespondText(w, "", http.StatusNoContent)
 	return nil
 }
 
