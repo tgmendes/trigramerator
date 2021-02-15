@@ -45,6 +45,10 @@ It is a conscious design decision to keep the size of the texts short. We are as
 
 We could easily improve this to generate large pieces of text over multiple paragraphs, by preserving carriage returns (newlines) from the original text as one of the suffixes.
 
+### Router
+
+The router used in this project was taken from the [Go Service Template](https://github.com/tgmendes/go-service-template). It's a wrapper around [httprouter](https://github.com/julienschmidt/httprouter) and makes it easy to define the endpoints for the API. Without this template, the standard Go http router would be more than suitable for this project.
+
 ### Further Improvements
 * More thoroughly tested and robust service would be to cover edge cases and incorrect formats (what if someone submits a text with only 2 words?). There was a conscious decision of not tackling these cases for now, in the interest of time.
 
