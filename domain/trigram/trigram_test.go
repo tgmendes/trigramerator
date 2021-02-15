@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/tgmendes/trigramerator/business/trigram"
+	"github.com/tgmendes/trigramerator/domain/trigram"
 )
 
 func TestLearnTrigram(t *testing.T) {

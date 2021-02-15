@@ -9,10 +9,20 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tgmendes/trigramerator/app/web/handlers"
-	"github.com/tgmendes/trigramerator/pkg/config"
+	"github.com/tgmendes/trigramerator/app/handlers"
 	"github.com/tgmendes/trigramerator/pkg/db"
 )
+
+type serverConfig struct {
+	Host            string
+	ReadTimeout     time.Duration
+	WriteTimeout    time.Duration
+	ShutdownTimeout time.Duration
+}
+
+type config struct {
+	server serverConfig
+}
 
 func main() {
 	if err := run(); err != nil {
@@ -23,10 +33,11 @@ func main() {
 }
 
 func run() error {
+
 	// In a production environment we would be getting these configurations from environment variables.
 	// For this exercise we're just hardcoding for simplicity.
-	cfg := config.Config{
-		Server: config.Server{
+	cfg := config{
+		server: serverConfig{
 			Host:            ":8080",
 			ReadTimeout:     5 * time.Second,
 			WriteTimeout:    5 * time.Second,
@@ -41,10 +52,10 @@ func run() error {
 	db := db.NewMapSliceDB()
 
 	server := http.Server{
-		Addr:         cfg.Server.Host,
-		Handler:      handlers.API(shutdown, db),
-		ReadTimeout:  cfg.Server.ReadTimeout,
-		WriteTimeout: cfg.Server.WriteTimeout,
+		Addr:         cfg.server.Host,
+		Handler:      handlers.TrigramsAPI(shutdown, db),
+		ReadTimeout:  cfg.server.ReadTimeout,
+		WriteTimeout: cfg.server.WriteTimeout,
 	}
 
 	// Make a channel to listen for errors coming from the listener. Use a

@@ -60,7 +60,7 @@ We could easily improve this to generate large pieces of text over multiple para
 
 The trigram service was built using `go 1.15.8` using Go modules.
 
-* Running: `go run app/web/main.go`
+* Running: `go run app/main.go`
 * Testing: `go test ./...`
 
 ## Testing

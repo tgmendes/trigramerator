@@ -5,10 +5,22 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
-	"github.com/tgmendes/trigramerator/business/trigram"
+	"github.com/tgmendes/trigramerator/domain/trigram"
 	"github.com/tgmendes/trigramerator/pkg/web"
 )
+
+// TrigramsAPI starts a server and defines the handlers to be used for the APP.
+func TrigramsAPI(shutdown chan os.Signal, DB trigram.Storer) http.Handler {
+	server := web.NewServer(shutdown)
+
+	ts := trigramService{DB}
+	server.Post("/learn", ts.handleLearn)
+	server.Get("/generate", ts.handleGenerate)
+
+	return server
+}
 
 type trigramService struct {
 	db trigram.Storer
@@ -28,7 +40,6 @@ func (t trigramService) handleLearn(w http.ResponseWriter, r *http.Request) erro
 		web.RespondError(w, fmt.Sprintf("error occurred learning text: %s", err.Error()), http.StatusInternalServerError)
 		return err
 	}
-	log.Printf("new text successfully learned!")
 
 	web.RespondText(w, "", http.StatusNoContent)
 	return nil
