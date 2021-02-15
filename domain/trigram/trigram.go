@@ -9,7 +9,8 @@ import (
 )
 
 const (
-	// maxTextLength is the maximum amount of characters of the generated text.
+	// maxTextLength is the maximum amount of characters of the generated text. As an improvement, this could be
+	// turned into a parameter specified by env. variables.
 	maxTextLength int = 1000
 )
 
@@ -45,22 +46,25 @@ func Learn(db Storer, text string) error {
 // Generate generates random texts based the learned trigrams in the database.
 // It is a recursive function - if no initial key is provided, the text will
 // be generated from a random key in the database.
-func Generate(db Storer, text string, key string) (string, error) {
-	if key == "" {
-		key = db.RandomKey()
-		// we want to capitalize the first letter of the first word on the final text.
-		keyParts := strings.Split(key, " ")
-		text = fmt.Sprintf("%s %s", strings.Title(keyParts[0]), keyParts[1])
-	}
+func Generate(db Storer) (string, error) {
+	key := db.RandomKey()
 
+	// we want to capitalize the first letter of the first word on the final text.
+	keyParts := strings.Split(key, " ")
+	seedText := fmt.Sprintf("%s %s", strings.Title(keyParts[0]), keyParts[1])
+
+	return runGenerator(db, seedText, key)
+}
+
+func runGenerator(db Storer, text string, key string) (string, error) {
 	cleanKey, err := cleanText(key)
 	if err != nil {
 		return "", err
 	}
 
-	// we break out of the generator if there are no more available suffixes or if we've
-	// reached a new paragraph.
 	nextSuffixes := db.Get(cleanKey)
+	// if our database returns no suffixes, then we ran out of combinations and we exit the generator.
+	// alternatively, we exit the generator if our text exceeds our maximum defined length.
 	if nextSuffixes == nil || len(text) > maxTextLength {
 		if !isEndOfSentence(text) {
 			text = fmt.Sprintf("%s.\n", text)
@@ -75,7 +79,7 @@ func Generate(db Storer, text string, key string) (string, error) {
 	// to avoid splitting the whole text, to get the last 2 words, we provide the build key
 	nextKey := fmt.Sprintf("%s %s", strings.Split(key, " ")[1], suffix)
 
-	return Generate(db, text, nextKey)
+	return runGenerator(db, text, nextKey)
 }
 
 // cleanText will remove special characters from a given text.

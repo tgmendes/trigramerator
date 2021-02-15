@@ -38,7 +38,7 @@ func TestGenerate(t *testing.T) {
 	mockDB.On("RandomKey").Return("to be")
 	mockDB.data = testData
 
-	text, err := trigram.Generate(mockDB, "", "")
+	text, err := trigram.Generate(mockDB)
 
 	assert.Equal(t, "To be or not to, that is the question. Is that.\n", text)
 	assert.NoError(t, err)

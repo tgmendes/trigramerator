@@ -46,7 +46,7 @@ func (t trigramService) handleLearn(w http.ResponseWriter, r *http.Request) erro
 }
 
 func (t trigramService) handleGenerate(w http.ResponseWriter, r *http.Request) error {
-	text, err := trigram.Generate(t.db, "", "")
+	text, err := trigram.Generate(t.db)
 	if err != nil {
 		web.RespondError(w, fmt.Sprintf("error occurred generating text: %s", err.Error()), http.StatusInternalServerError)
 		return err
